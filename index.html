@@ -5,105 +5,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="toolbar.css">
-    <title>Document</title>
+    <title>Demo</title>
 </head>
 
 <body>
-
-    <div class="container">
-        <div class="jumbotron">
-            <h1 class="display-3">Jumbo heading</h1>
-            <p class="lead">Jumbo helper text</p>
-            <hr class="my-2">
-            <p>More info</p>
-            <hr>
-            <br>
-            <div class="toolbar-text-editor">
-                <div class="print-save">
-                    <button><span class="icon-print"></span></button>
-                    <button><span class="icon-save"></span></button>
-                </div>
-                <select id="select-font" class="font">
-                    <option class="tnr-font" value="Times New Roman">Times New Roman</option>
-                    <option class="arial-font" value="Arial">Arial</option>
-                </select>
-                <select id="select-size" class="size">
-                    <option value="14px">1</option>
-                    <option value="18px">2</option>
-                    <option value="23px">3</option>
-                    <option value="25px">4</option>
-                    <option value="30px">5</option>
-                </select>
-                <div class="table-dropdown">
-                    <button id="insert-table" class="insert-table"><span class="icon-table-grid"></span></button>
-                    <input type="hidden" value="5" name="col">
-                    <input type="hidden" value="5" name="row">
-                    <div id="table-dropdown-content">
-                        <p id="display-size">Insert Table</p>
-                        <div id="select-table-size">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="font-style">
-                    <button><span class="icon-bold"></span></button>
-                    <button><span class="icon-italic"></span></button>
-                    <button><span class="icon-underline"></span></button>
-                </div>
-                <div class="align">
-                    <button><span class="icon-left-alignment"></span></button>
-                    <button><span class="icon-center-alignment"></span></button>
-                    <button><span class="icon-right-alignment"></span></button>
-                </div>
-                <div class="dropdown">
-                    <button id="line-spacing" class="line-spacing"><span class="icon-line-spacing"></span></button>
-                    <ul id="dropdown-content">
-                        <li><span>1.0</span><span class="icon-check-symbol"></span></li>
-                        <li><span>1.1</span></li>
-                        <li><span>1.5</span></li>
-                    </ul>
+    <div class="toolbar-text-editor">
+        <div class="print-save">
+            <button><span class="icon-print"></span></button>
+            <button><span class="icon-save"></span></button>
+        </div>
+        <select id="select-font" class="font">
+            <option class="tnr-font" value="Times New Roman">Times New Roman</option>
+            <option class="arial-font" value="Arial">Arial</option>
+        </select>
+        <select id="select-size" class="size">
+            <option value="14px">1</option>
+            <option value="18px">2</option>
+            <option value="23px">3</option>
+            <option value="25px">4</option>
+            <option value="30px">5</option>
+        </select>
+        <div class="table-dropdown">
+            <button id="insert-table" class="insert-table"><span class="icon-table-grid"></span></button>
+            <input type="hidden" value="5" name="col">
+            <input type="hidden" value="5" name="row">
+            <div id="table-dropdown-content">
+                <p id="display-size">Insert Table</p>
+                <div id="select-table-size">
+                    <!-- <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span> -->
                 </div>
             </div>
+        </div>
+        <div class="font-style">
+            <button><span class="icon-bold"></span></button>
+            <button><span class="icon-italic"></span></button>
+            <button><span class="icon-underline"></span></button>
+        </div>
+        <div class="align">
+            <button><span class="icon-left-alignment"></span></button>
+            <button><span class="icon-center-alignment"></span></button>
+            <button><span class="icon-right-alignment"></span></button>
+        </div>
+        <div class="dropdown">
+            <button id="line-spacing" class="line-spacing"><span class="icon-line-spacing"></span></button>
+            <ul id="dropdown-content">
+                <li><span>1.0</span><span class="icon-check-symbol"></span></li>
+                <li><span>1.1</span></li>
+                <li><span>1.5</span></li>
+            </ul>
         </div>
     </div>
     </div>
 </body>
 <script src="toolbar.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
 
 </html>

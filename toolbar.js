@@ -1,3 +1,6 @@
+const selectSizeTable = document.getElementById('select-table-size');
+const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
+
 document.getElementById('select-font').onchange = (event) => {
     var font = event.target.value;
     //TODO change font document here
@@ -8,6 +11,17 @@ document.getElementById('line-spacing').onclick = (event) => {
 }
 
 document.getElementById('insert-table').onclick = (event) => {
+    selectSizeTable.innerHTML = '';
+    document.querySelector('.table-dropdown input[name=row]').value = 5;
+    document.querySelector('.table-dropdown input[name=col]').value = 5;
+    
+    for (let i = 0; i < 25; i++) {
+        let s = document.createElement('span');
+        addEventToSpan(s);
+        selectSizeTable.appendChild(s);
+    }
+    selectSizeTable.style.gridTemplateColumns = 'auto auto auto auto auto';
+
     document.getElementById('table-dropdown-content').classList.toggle('show');
 }
 
@@ -20,8 +34,6 @@ window.onclick = (event) => {
         document.getElementById("table-dropdown-content").classList.remove('show');
     }
 }
-const selectSizeTable = document.getElementById('select-table-size');
-const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
 
 let addEventToSpan = (span) => {
     span.onclick = (event) => {
@@ -114,8 +126,4 @@ let addEventToSpan = (span) => {
             document.getElementById('display-size').innerHTML = 'Insert Table';
         }
     }
-}
-
-for (let span of selectSizeTableSpanList) {
-    addEventToSpan(span);
 }
