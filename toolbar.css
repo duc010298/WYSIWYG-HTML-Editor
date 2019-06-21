@@ -18,16 +18,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-check-symbol:before {
+    content: "\e912";
+}
+
 .icon-print:before {
     content: "\e910";
 }
 
 .icon-save:before {
     content: "\e911";
-}
-
-.icon-check-box:before {
-    content: "\e912";
 }
 
 .icon-backward:before {
