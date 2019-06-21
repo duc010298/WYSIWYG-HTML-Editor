@@ -11,6 +11,10 @@
 
 <body>
     <div class="toolbar-text-editor">
+        <div class="backward-forward">
+            <button id="backward"><span class="icon-backward"></span></button>
+            <button id="forward"><span class="icon-forward"></span></button>
+        </div>
         <div class="print-save">
             <button><span class="icon-print"></span></button>
             <button><span class="icon-save"></span></button>
@@ -19,12 +23,12 @@
             <option class="tnr-font" value="Times New Roman">Times New Roman</option>
             <option class="arial-font" value="Arial">Arial</option>
         </select>
-        <select id="select-size" class="size">
-            <option value="14px">1</option>
-            <option value="18px">2</option>
-            <option value="23px">3</option>
-            <option value="25px">4</option>
-            <option value="30px">5</option>
+        <select id="select-font-size" class="size">
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
         </select>
         <div class="table-dropdown">
             <button id="insert-table" class="insert-table"><span class="icon-table-grid"></span></button>
@@ -35,15 +39,16 @@
                 <div id="select-table-size"></div>
             </div>
         </div>
+        <button class="merge-table"><span class="icon-merge"></span></button>
         <div class="font-style">
-            <button><span class="icon-bold"></span></button>
-            <button><span class="icon-italic"></span></button>
-            <button><span class="icon-underline"></span></button>
+            <button id="bold"><span class="icon-bold"></span></button>
+            <button id="italic"><span class="icon-italic"></span></button>
+            <button id="underline"><span class="icon-underline"></span></button>
         </div>
         <div class="align">
-            <button><span class="icon-left-alignment"></span></button>
-            <button><span class="icon-center-alignment"></span></button>
-            <button><span class="icon-right-alignment"></span></button>
+            <button id="align-left" class="button-active"><span class="icon-left-alignment"></span></button>
+            <button id="align-center"><span class="icon-center-alignment"></span></button>
+            <button id="align-right"><span class="icon-right-alignment"></span></button>
         </div>
         <div class="dropdown">
             <button id="line-spacing" class="line-spacing"><span class="icon-line-spacing"></span></button>
@@ -54,8 +59,9 @@
             </ul>
         </div>
     </div>
-    
-    
+
+    <div id="editor" style="position: absolute; ;width: 700px; height: 500px; margin-top: 60px; border: 1px solid #000">
+    </div>
 </body>
 <script src="toolbar.js"></script>
 

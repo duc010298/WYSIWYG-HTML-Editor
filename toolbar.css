@@ -18,6 +18,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-forward:before {
+    content: "\e913";
+}
+
 .icon-check-symbol:before {
     content: "\e912";
 }
@@ -322,6 +326,7 @@
 }
 
 .toolbar-text-editor .print-save {
+    margin-left: 10px;
     display: inline;
 }
 
@@ -342,4 +347,50 @@
 
 .toolbar-text-editor .print-save button:focus {
     outline: none;
+}
+
+.toolbar-text-editor .backward-forward {
+    display: inline;
+}
+
+.toolbar-text-editor .backward-forward button {
+    border: 1px solid #D2D2D2;
+    height: 30px;
+    width: 30px;
+    font-size: 16px;
+    margin-left: 2px;
+    padding: 4px;
+}
+
+.toolbar-text-editor .backward-forward button:hover {
+    background-color: #C5C5C5;
+    border-color: #969696;
+    cursor: pointer;
+}
+
+.toolbar-text-editor .backward-forward button:focus {
+    outline: none;
+}
+
+.toolbar-text-editor .merge-table {
+    border: 1px solid #D2D2D2;
+    height: 30px;
+    width: 30px;
+    font-size: 16px;
+    margin-left: 2px;
+    padding: 4px;
+}
+
+.toolbar-text-editor .merge-table:hover {
+    background-color: #C5C5C5;
+    border-color: #969696;
+    cursor: pointer;
+}
+
+.toolbar-text-editor .merge-table:focus {
+    outline: none;
+}
+
+.toolbar-text-editor .button-active {
+    background-color: #a6a6a6;
 }

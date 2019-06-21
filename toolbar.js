@@ -127,3 +127,62 @@ let addEventToSpan = (span) => {
         }
     }
 }
+
+//main function
+document.getElementById('editor').contentEditable = true;
+document.getElementById('editor').spellcheck = false;
+document.execCommand('fontSize', false, 4); //set default font size
+
+document.getElementById('backward').onclick = (event) => {
+    document.execCommand('undo', false, null);
+}
+
+document.getElementById('forward').onclick = (event) => {
+    document.execCommand('redo', false, null);
+}
+
+document.getElementById('select-font').onchange = (event) => {
+    let value = event.target.value;
+    document.execCommand('fontName', false, value);
+}
+
+document.getElementById('select-font-size').onchange = (event) => {
+    let value = event.target.value;
+    document.execCommand('fontSize', false, value);
+}
+
+document.getElementById('bold').onclick = (event) => {
+    document.execCommand('bold', false, null);
+    document.getElementById('bold').classList.toggle('button-active');
+}
+
+document.getElementById('italic').onclick = (event) => {
+    document.execCommand('italic', false, null);
+    document.getElementById('italic').classList.toggle('button-active');
+}
+
+document.getElementById('underline').onclick = (event) => {
+    document.execCommand('underline', false, null);
+    document.getElementById('underline').classList.toggle('button-active');
+}
+
+document.getElementById('align-left').onclick = (event) => {
+    document.execCommand('justifyLeft', false, null);
+    document.getElementById('align-left').classList.add('button-active');
+    document.getElementById('align-center').classList.remove('button-active');
+    document.getElementById('align-right').classList.remove('button-active');
+}
+
+document.getElementById('align-center').onclick = (event) => {
+    document.execCommand('justifyCenter', false, null);
+    document.getElementById('align-left').classList.remove('button-active');
+    document.getElementById('align-center').classList.add('button-active');
+    document.getElementById('align-right').classList.remove('button-active');
+}
+
+document.getElementById('align-right').onclick = (event) => {
+    document.execCommand('justifyRight', false, null);
+    document.getElementById('align-left').classList.remove('button-active');
+    document.getElementById('align-center').classList.remove('button-active');
+    document.getElementById('align-right').classList.add('button-active');
+}
