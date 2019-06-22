@@ -1,5 +1,6 @@
 const selectSizeTable = document.getElementById('select-table-size');
 const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
+const editor = document.getElementById('editor');
 
 document.getElementById('select-font').onchange = (event) => {
     var font = event.target.value;
@@ -14,7 +15,7 @@ document.getElementById('insert-table').onclick = (event) => {
     selectSizeTable.innerHTML = '';
     document.querySelector('.table-dropdown input[name=row]').value = 5;
     document.querySelector('.table-dropdown input[name=col]').value = 5;
-    
+
     for (let i = 0; i < 25; i++) {
         let s = document.createElement('span');
         addEventToSpan(s);
@@ -129,8 +130,8 @@ let addEventToSpan = (span) => {
 }
 
 //main function
-document.getElementById('editor').contentEditable = true;
-document.getElementById('editor').spellcheck = false;
+editor.contentEditable = true;
+editor.spellcheck = false;
 document.execCommand('fontSize', false, 4); //set default font size
 
 document.getElementById('backward').onclick = (event) => {
@@ -186,3 +187,96 @@ document.getElementById('align-right').onclick = (event) => {
     document.getElementById('align-center').classList.remove('button-active');
     document.getElementById('align-right').classList.add('button-active');
 }
+
+let detectStyleOnCaret = () => {
+    let selection;
+    if (window.getSelection) {
+        selection = window.getSelection();
+    } else if (document.selection && document.selection.type != "Control") {
+        selection = document.selection;
+    }
+    let anchorNode = selection.anchorNode;
+    let carretNode = anchorNode.nodeType === 3 ? anchorNode.parentNode : anchorNode;
+
+    hightLightButtonStyle(carretNode, false, false, false, false, false, false);
+}
+
+let hightLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
+    isBold, isItalic, isUnderline, isAlign) => {
+    if (node === editor) {
+        if (!isChangedFontStyle) document.getElementById('select-font').value = 'Times New Roman';
+        if (!isChangedFontSize) document.getElementById('select-font-size').value = 4;
+        if (!isBold) document.getElementById('bold').classList.remove('button-active');
+        if (!isItalic) document.getElementById('italic').classList.remove('button-active');
+        if (!isUnderline) document.getElementById('underline').classList.remove('button-active');
+        if (!isAlign) {
+            document.getElementById('align-left').classList.add('button-active');
+            document.getElementById('align-center').classList.remove('button-active');
+            document.getElementById('align-right').classList.remove('button-active');
+        }
+        return;
+    }
+    let nodeParent = node.parentNode;
+    if (node.tagName === 'FONT') {
+        if (!isChangedFontStyle) {
+            let fontFamily = node.getAttribute('face');
+            if (fontFamily !== null) {
+                document.getElementById('select-font').value = fontFamily;
+                isChangedFontStyle = true;
+            }
+        }
+
+        if (!isChangedFontSize) {
+            let fontSize = node.getAttribute('size');
+            if (fontSize !== null) {
+                document.getElementById('select-font-size').value = fontSize;
+                isChangedFontSize = true;
+            }
+        }
+    }
+
+    if (node.tagName === 'B') {
+        if (!isBold) {
+            document.getElementById('bold').classList.add('button-active');
+            isBold = true;
+        }
+    }
+
+    if (node.tagName === 'I') {
+        if (!isItalic) {
+            document.getElementById('italic').classList.add('button-active');
+            isItalic = true;
+        }
+    }
+
+    if (node.tagName === 'U') {
+        if (!isUnderline) {
+            document.getElementById('underline').classList.add('button-active');
+            isUnderline = true;
+        }
+    }
+
+    if (node.tagName === 'DIV') {
+        if (!isAlign) {
+            let align = node.style.textAlign;
+            if (align === 'center') {
+                document.getElementById('align-left').classList.remove('button-active');
+                document.getElementById('align-center').classList.add('button-active');
+                document.getElementById('align-right').classList.remove('button-active');
+                isAlign = true;
+            }
+            if (align === 'right') {
+                document.getElementById('align-left').classList.remove('button-active');
+                document.getElementById('align-center').classList.remove('button-active');
+                document.getElementById('align-right').classList.add('button-active');
+                isAlign = true;
+            }
+        }
+    }
+
+    hightLightButtonStyle(nodeParent, isChangedFontStyle, isChangedFontSize,
+        isBold, isItalic, isUnderline, isAlign);
+}
+
+editor.onmouseup = detectStyleOnCaret;
+editor.onkeyup = detectStyleOnCaret;
