@@ -1,5 +1,6 @@
 const selectSizeTable = document.getElementById('select-table-size');
 const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
+const lineSpaceDropdown = document.getElementById('dropdown-content');
 const editor = document.getElementById('editor');
 
 document.getElementById('select-font').onchange = (event) => {
@@ -280,3 +281,30 @@ let hightLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
 
 editor.onmouseup = detectStyleOnCaret;
 editor.onkeyup = detectStyleOnCaret;
+
+for(let li of lineSpaceDropdown.getElementsByTagName('li')) {
+    li.onclick = (event) => {
+        let liTag;
+        if(event.target.tagName === 'SPAN') {
+            liTag = event.target.parentNode;
+        } else {
+            liTag = event.target;
+        }
+
+        let symbols = document.querySelectorAll('#dropdown-content li span:nth-child(2)');
+        for(let symbol of symbols) {
+            symbol.remove();
+        }
+
+        let s = document.createElement('span');
+        s.classList.add('icon-check-symbol');
+        liTag.appendChild(s);
+        
+        let valueSpace = liTag.firstChild.innerHTML;
+        let childNodes = editor.childNodes;
+        for(let node of childNodes) {
+            if(node.style === undefined) break;
+            node.style.lineHeight = valueSpace;
+        }
+    }
+}
