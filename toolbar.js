@@ -37,19 +37,67 @@ window.onclick = (event) => {
     }
 }
 
+let getCarretNode = () => {
+    let selection;
+    if (window.getSelection) {
+        selection = window.getSelection();
+    } else if (document.selection && document.selection.type != "Control") {
+        selection = document.selection;
+    }
+    let anchorNode = selection.anchorNode;
+    if (anchorNode === null) return null;
+    return anchorNode.nodeType === 3 ? anchorNode.parentNode : anchorNode;
+}
+
 let addEventToSpan = (span) => {
     span.onclick = (event) => {
-        // let indexSpan = 0;
-        // for(let span of selectSizeTableSpanList) {
-        //     indexSpan++;
-        //     if(event.target === span) {
-        //         let col = document.querySelector('.table-dropdown input[name=col]').value;
-        //         let indexRow = Math.ceil(indexSpan / col);
-        //         let indexCol = indexSpan - (col * (indexRow - 1));
-        //         //TODO draw table with indexRow and indexCol
-        //         return;
-        //     }
-        // }
+        let indexSpan = 0;
+        for (let span of selectSizeTableSpanList) {
+            indexSpan++;
+            if (event.target === span) {
+                let row = Number(document.querySelector('.table-dropdown input[name=row]').value);
+                let col = Number(document.querySelector('.table-dropdown input[name=col]').value);
+                let indexRow = Math.ceil(indexSpan / col);
+                let indexCol = indexSpan - (col * (indexRow - 1));
+
+                let table = document.createElement('table');
+                table.style.borderCollapse = 'collapse';
+                table.style.border = '1px dotted #000';
+                table.style.width = '100%';
+                table.style.tableLayout = 'fixed';
+                table.setAttribute('cellpadding', '0');
+                table.setAttribute('cellspacing', '0');
+
+                let tableBody = document.createElement('tbody');
+                
+                let tableHeader = document.createElement('tr');
+                tableHeader.style.visibility = 'hidden';
+                for (let i = 0; i < indexCol; i++) {
+                    let th = document.createElement('th');
+                    th.style.minWidth = '30px';
+                    tableHeader.appendChild(th);
+                }
+                tableBody.appendChild(tableHeader);
+
+                for (let i = 0; i < indexRow; i++) {
+                    let tr = document.createElement('tr');
+                    for (let j = 0; j < indexCol; j++) {
+                        let td = document.createElement('td');
+                        td.style.borderCollapse = 'collapse';
+                        td.style.border = '1px dotted #000';
+                        td.style.wordWrap = 'break-word';
+                        td.style.minWidth = '30px';
+                        tr.appendChild(td);
+                    }
+                    tableBody.appendChild(tr);
+                }
+                table.appendChild(tableBody);
+
+                let carretNode = getCarretNode();
+                if (carretNode === null) carretNode = editor;
+                carretNode.appendChild(table);
+            }
+        }
     }
 
     span.onmouseover = (event) => {
@@ -190,14 +238,7 @@ document.getElementById('align-right').onclick = (event) => {
 }
 
 let detectStyleOnCaret = () => {
-    let selection;
-    if (window.getSelection) {
-        selection = window.getSelection();
-    } else if (document.selection && document.selection.type != "Control") {
-        selection = document.selection;
-    }
-    let anchorNode = selection.anchorNode;
-    let carretNode = anchorNode.nodeType === 3 ? anchorNode.parentNode : anchorNode;
+    carretNode = getCarretNode();
 
     hightLightButtonStyle(carretNode, false, false, false, false, false, false);
 }
@@ -282,28 +323,28 @@ let hightLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
 editor.onmouseup = detectStyleOnCaret;
 editor.onkeyup = detectStyleOnCaret;
 
-for(let li of lineSpaceDropdown.getElementsByTagName('li')) {
+for (let li of lineSpaceDropdown.getElementsByTagName('li')) {
     li.onclick = (event) => {
         let liTag;
-        if(event.target.tagName === 'SPAN') {
+        if (event.target.tagName === 'SPAN') {
             liTag = event.target.parentNode;
         } else {
             liTag = event.target;
         }
 
         let symbols = document.querySelectorAll('#dropdown-content li span:nth-child(2)');
-        for(let symbol of symbols) {
+        for (let symbol of symbols) {
             symbol.remove();
         }
 
         let s = document.createElement('span');
         s.classList.add('icon-check-symbol');
         liTag.appendChild(s);
-        
+
         let valueSpace = liTag.firstChild.innerHTML;
         let childNodes = editor.childNodes;
-        for(let node of childNodes) {
-            if(node.style === undefined) break;
+        for (let node of childNodes) {
+            if (node.style === undefined) break;
             node.style.lineHeight = valueSpace;
         }
     }
