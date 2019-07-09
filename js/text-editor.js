@@ -1,5 +1,3 @@
-import ColumnResizer from '/js/col-resizeable.js';
-
 const selectSizeTable = document.getElementById('select-table-size');
 const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
 const lineSpaceDropdown = document.getElementById('dropdown-content');
@@ -90,7 +88,12 @@ let addEventToSpan = (span) => {
                 if (carretNode === null) carretNode = editor;
                 carretNode.appendChild(table);
 
-                new ColumnResizer(table, {
+                let divTag = document.createElement('div');
+                let brTag = document.createElement('br');
+                divTag.appendChild(brTag);
+                carretNode.appendChild(divTag);
+
+                $(table).colResizable({
                     liveDrag: true,
                     draggingClass: "dragging"
                 });
