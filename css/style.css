@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Text Editor';
-    src: url('fonts/text-editor.woff') format('woff');
+    src: url('/fonts/text-editor.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -328,7 +328,6 @@
 }
 
 .toolbar-text-editor .print-save {
-    margin-left: 10px;
     display: inline;
 }
 
@@ -348,29 +347,6 @@
 }
 
 .toolbar-text-editor .print-save button:focus {
-    outline: none;
-}
-
-.toolbar-text-editor .backward-forward {
-    display: inline;
-}
-
-.toolbar-text-editor .backward-forward button {
-    border: 1px solid #D2D2D2;
-    height: 30px;
-    width: 30px;
-    font-size: 16px;
-    margin-left: 2px;
-    padding: 4px;
-}
-
-.toolbar-text-editor .backward-forward button:hover {
-    background-color: #C5C5C5;
-    border-color: #969696;
-    cursor: pointer;
-}
-
-.toolbar-text-editor .backward-forward button:focus {
     outline: none;
 }
 

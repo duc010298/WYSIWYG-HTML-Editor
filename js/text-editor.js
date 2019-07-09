@@ -1,12 +1,9 @@
+import ColumnResizer from '/js/col-resizeable.js';
+
 const selectSizeTable = document.getElementById('select-table-size');
 const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
 const lineSpaceDropdown = document.getElementById('dropdown-content');
 const editor = document.getElementById('editor');
-
-document.getElementById('select-font').onchange = (event) => {
-    var font = event.target.value;
-    //TODO change font document here
-}
 
 document.getElementById('line-spacing').onclick = (event) => {
     document.getElementById('dropdown-content').classList.toggle('show');
@@ -65,16 +62,13 @@ let addEventToSpan = (span) => {
                 table.style.border = '1px dotted #000';
                 table.style.width = '100%';
                 table.style.tableLayout = 'fixed';
-                table.setAttribute('cellpadding', '0');
-                table.setAttribute('cellspacing', '0');
 
                 let tableBody = document.createElement('tbody');
-                
+
                 let tableHeader = document.createElement('tr');
                 tableHeader.style.visibility = 'hidden';
                 for (let i = 0; i < indexCol; i++) {
                     let th = document.createElement('th');
-                    th.style.minWidth = '30px';
                     tableHeader.appendChild(th);
                 }
                 tableBody.appendChild(tableHeader);
@@ -86,7 +80,6 @@ let addEventToSpan = (span) => {
                         td.style.borderCollapse = 'collapse';
                         td.style.border = '1px dotted #000';
                         td.style.wordWrap = 'break-word';
-                        td.style.minWidth = '30px';
                         tr.appendChild(td);
                     }
                     tableBody.appendChild(tr);
@@ -96,6 +89,11 @@ let addEventToSpan = (span) => {
                 let carretNode = getCarretNode();
                 if (carretNode === null) carretNode = editor;
                 carretNode.appendChild(table);
+
+                new ColumnResizer(table, {
+                    liveDrag: true,
+                    draggingClass: "dragging"
+                });
             }
         }
     }
@@ -182,14 +180,6 @@ let addEventToSpan = (span) => {
 editor.contentEditable = true;
 editor.spellcheck = false;
 document.execCommand('fontSize', false, 4); //set default font size
-
-document.getElementById('backward').onclick = (event) => {
-    document.execCommand('undo', false, null);
-}
-
-document.getElementById('forward').onclick = (event) => {
-    document.execCommand('redo', false, null);
-}
 
 document.getElementById('select-font').onchange = (event) => {
     let value = event.target.value;
