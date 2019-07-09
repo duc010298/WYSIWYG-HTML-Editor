@@ -228,7 +228,7 @@ document.getElementById('align-right').onclick = (event) => {
 }
 
 let detectStyleOnCaret = () => {
-    carretNode = getCarretNode();
+    let carretNode = getCarretNode();
 
     hightLightButtonStyle(carretNode, false, false, false, false, false, false);
 }
