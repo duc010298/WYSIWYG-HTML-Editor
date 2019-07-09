@@ -232,10 +232,10 @@ document.getElementById('align-right').onclick = (event) => {
 
 let detectStyleOnCaret = () => {
     let carretNode = getCarretNode();
-    hightLightButtonStyle(carretNode, false, false, false, false, false, false);
+    highLightButtonStyle(carretNode, false, false, false, false, false, false);
 }
 
-let hightLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
+let highLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
     isBold, isItalic, isUnderline, isAlign) => {
     if (node === editor) {
         if (!isChangedFontStyle) document.getElementById('select-font').value = 'Times New Roman';
@@ -308,7 +308,7 @@ let hightLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
         }
     }
 
-    hightLightButtonStyle(nodeParent, isChangedFontStyle, isChangedFontSize,
+    highLightButtonStyle(nodeParent, isChangedFontStyle, isChangedFontSize,
         isBold, isItalic, isUnderline, isAlign);
 }
 
