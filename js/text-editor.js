@@ -232,7 +232,6 @@ document.getElementById('align-right').onclick = (event) => {
 
 let detectStyleOnCaret = () => {
     let carretNode = getCarretNode();
-
     hightLightButtonStyle(carretNode, false, false, false, false, false, false);
 }
 
@@ -337,7 +336,7 @@ for (let li of lineSpaceDropdown.getElementsByTagName('li')) {
         let valueSpace = liTag.firstChild.innerHTML;
         let childNodes = editor.childNodes;
         for (let node of childNodes) {
-            if (node.style === undefined) break;
+            if (node.style === undefined) continue;
             node.style.lineHeight = valueSpace;
         }
     }
