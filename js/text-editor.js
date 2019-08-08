@@ -487,20 +487,30 @@ document.getElementById('merge-table').onclick = (event) => {
     for (let i = fRow; i <= lRow; i++) {
         let tempTr = listTrTag[i];
         let listTdTag = tempTr.getElementsByTagName("TD");
-        for (let j = fCol; j <= lCol; j++) {
-            let tempIndex = fCol;
-            if (isFirst) {
-                resetHighlight(listTdTag[fCol - 1]);
-                listTdTag[fCol - 1].style.backgroundColor = '#b4d7ff';
-                isFirst = false;
-                let colspan = lCol - fCol + 1;
-                let rowspan = lRow - fRow + 1;
-                listTdTag[fCol - 1].setAttribute("colspan", colspan);
-                listTdTag[fCol - 1].setAttribute("rowspan", rowspan);
-                tempIndex++;
-                continue;
+        if (isFirst) {
+            for (let j = fCol - 1; j < lCol; j++) {
+                if (isFirst) {
+                    resetHighlight(listTdTag[fCol - 1]);
+                    listTdTag[fCol - 1].style.backgroundColor = '#b4d7ff';
+                    isFirst = false;
+                    let colspan = lCol - fCol + 1;
+                    let rowspan = lRow - fRow + 1;
+                    listTdTag[fCol - 1].setAttribute("colspan", colspan);
+                    listTdTag[fCol - 1].setAttribute("rowspan", rowspan);
+                    continue;
+                }
+                listTdTag[j].innerHTML = "";
+                listTdTag[j].removeAttribute("class");
+                listTdTag[j].removeAttribute("style");
+                listTdTag[j].hidden = true;
             }
-            tempTr.removeChild(listTdTag[tempIndex]);
+            continue;
+        }
+        for (let j = fCol - 1; j < lCol; j++) {
+            listTdTag[j].innerHTML = "";
+            listTdTag[j].removeAttribute("class");
+            listTdTag[j].removeAttribute("style");
+            listTdTag[j].hidden = true;
         }
     }
 }
