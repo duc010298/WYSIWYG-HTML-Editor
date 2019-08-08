@@ -13,6 +13,7 @@ editor.onmousedown = (event) => {
         let listTd = document.getElementsByTagName("TD");
         for (let td of listTd) {
             td.style.backgroundColor = null;
+            td.classList.remove('highlight');
         }
     }
 }
@@ -95,6 +96,7 @@ let resetHighlight = (td) => {
     listTd = tBodyNode.getElementsByTagName("TD");
     for (let td of listTd) {
         td.style.backgroundColor = null;
+        td.classList.remove('highlight');
     }
 }
 
@@ -139,6 +141,7 @@ let addEventToTd = (td) => {
                     for (let j = fCol; j <= lCol; j++) {
                         let tdTag = listTd[j - 1];
                         tdTag.style.backgroundColor = '#b4d7ff';
+                        tdTag.classList.add('highlight');
                     }
                 }
             }
@@ -451,6 +454,53 @@ for (let li of lineSpaceDropdown.getElementsByTagName('li')) {
         for (let node of childNodes) {
             if (node.style === undefined) continue;
             node.style.lineHeight = valueSpace;
+        }
+    }
+}
+
+document.getElementById('merge-table').onclick = (event) => {
+    let fCol, fRow, lCol, lRow;
+    if (firstPos[0] < lastPos[0]) {
+        fCol = firstPos[0];
+        lCol = lastPos[0];
+    } else {
+        lCol = firstPos[0];
+        fCol = lastPos[0];
+    }
+    if (firstPos[1] < lastPos[1]) {
+        fRow = firstPos[1];
+        lRow = lastPos[1];
+    } else {
+        lRow = firstPos[1];
+        fRow = lastPos[1];
+    }
+
+    let highlightEl = document.getElementsByClassName('highlight')[0];
+    let tBody = highlightEl.parentNode;
+    while (true) {
+        if (tBody.nodeName === 'TBODY') break;
+        tBody = tBody.parentNode;
+    }
+    listTrTag = tBody.getElementsByTagName("TR");
+
+    let isFirst = true;
+    for (let i = fRow; i <= lRow; i++) {
+        let tempTr = listTrTag[i];
+        let listTdTag = tempTr.getElementsByTagName("TD");
+        for (let j = fCol; j <= lCol; j++) {
+            let tempIndex = fCol;
+            if (isFirst) {
+                resetHighlight(listTdTag[fCol - 1]);
+                listTdTag[fCol - 1].style.backgroundColor = '#b4d7ff';
+                isFirst = false;
+                let colspan = lCol - fCol + 1;
+                let rowspan = lRow - fRow + 1;
+                listTdTag[fCol - 1].setAttribute("colspan", colspan);
+                listTdTag[fCol - 1].setAttribute("rowspan", rowspan);
+                tempIndex++;
+                continue;
+            }
+            tempTr.removeChild(listTdTag[tempIndex]);
         }
     }
 }
