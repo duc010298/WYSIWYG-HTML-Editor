@@ -3,6 +3,20 @@ const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
 const lineSpaceDropdown = document.getElementById('dropdown-content');
 const editor = document.getElementById('editor');
 
+let highlightFlag = false;
+let firstPos;
+let lastPos;
+
+editor.onmousedown = (event) => {
+    if (event.target.nodeName !== "TD") {
+        highlightFlag = false;
+        let listTd = document.getElementsByTagName("TD");
+        for (let td of listTd) {
+            td.style.backgroundColor = null;
+        }
+    }
+}
+
 document.getElementById('line-spacing').onclick = (event) => {
     document.getElementById('dropdown-content').classList.toggle('show');
 }
@@ -44,6 +58,94 @@ let getCarretNode = () => {
     return anchorNode.nodeType === 3 ? anchorNode.parentNode : anchorNode;
 }
 
+let detectPosition = (td) => {
+    let col = 0;
+    let row = -1;
+    let trNode = td.parentNode;
+    while (true) {
+        if (trNode.nodeName === "TR") break;
+        trNode = trNode.parentNode;
+    }
+    let listTd = trNode.getElementsByTagName("TD");
+    for (let tempTd of listTd) {
+        col++;
+        if (td === tempTd) break;
+    }
+
+    let tBody;
+    tBody = trNode.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    let listTr = tBody.getElementsByTagName("TR");
+    for (let tempTr of listTr) {
+        row++;
+        if (trNode === tempTr) break;
+    }
+    return [col, row];
+}
+
+let resetHighlight = (td) => {
+    let tBodyNode = td.parentNode;
+    while (true) {
+        if (tBodyNode.nodeName === "TBODY") break;
+        tBodyNode = tBodyNode.parentNode;
+    }
+    listTd = tBodyNode.getElementsByTagName("TD");
+    for (let td of listTd) {
+        td.style.backgroundColor = null;
+    }
+}
+
+let addEventToTd = (td) => {
+    td.onmousedown = (event) => {
+        resetHighlight(event.target);
+        firstPos = detectPosition(event.target);
+        lastPos = firstPos;
+        highlightFlag = true;
+    }
+    td.onmousemove = (event) => {
+        if (highlightFlag) {
+            let currentPos = detectPosition(event.target);
+            if (JSON.stringify(currentPos) != JSON.stringify(lastPos)) {
+                resetHighlight(event.target);
+                lastPos = currentPos;
+
+                let fCol, fRow, lCol, lRow;
+                if (firstPos[0] < lastPos[0]) {
+                    fCol = firstPos[0];
+                    lCol = lastPos[0];
+                } else {
+                    lCol = firstPos[0];
+                    fCol = lastPos[0];
+                }
+                if (firstPos[1] < lastPos[1]) {
+                    fRow = firstPos[1];
+                    lRow = lastPos[1];
+                } else {
+                    lRow = firstPos[1];
+                    fRow = lastPos[1];
+                }
+
+                let tBodyNode = event.target.parentNode;
+                while (true) {
+                    if (tBodyNode.nodeName === "TBODY") break;
+                    tBodyNode = tBodyNode.parentNode;
+                }
+                let listTr = tBodyNode.getElementsByTagName("TR");
+                for (let i = fRow; i <= lRow; i++) {
+                    let listTd = listTr[i].getElementsByTagName("TD");
+                    for (let j = fCol; j <= lCol; j++) {
+                        let tdTag = listTd[j - 1];
+                        tdTag.style.backgroundColor = '#b4d7ff';
+                    }
+                }
+            }
+        }
+    }
+}
+
 let addEventToSpan = (span) => {
     span.onclick = (event) => {
         let indexSpan = 0;
@@ -78,6 +180,7 @@ let addEventToSpan = (span) => {
                         td.style.borderCollapse = 'collapse';
                         td.style.border = '1px dotted #000';
                         td.style.wordWrap = 'break-word';
+                        addEventToTd(td);
                         tr.appendChild(td);
                     }
                     tableBody.appendChild(tr);
@@ -97,6 +200,10 @@ let addEventToSpan = (span) => {
                     liveDrag: true,
                     draggingClass: "dragging"
                 });
+
+                table.onmouseup = (event) => {
+                    highlightFlag = false;
+                }
             }
         }
     }
