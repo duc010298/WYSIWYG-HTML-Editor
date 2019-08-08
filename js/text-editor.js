@@ -397,9 +397,15 @@ let highLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
         }
     }
 
-    if (node.tagName === 'DIV') {
+    if (node.tagName === 'DIV' || node.tagName === 'TD') {
         if (!isAlign) {
             let align = node.style.textAlign;
+            if (align === 'left') {
+                document.getElementById('align-left').classList.add('button-active');
+                document.getElementById('align-center').classList.remove('button-active');
+                document.getElementById('align-right').classList.remove('button-active');
+                isAlign = true;
+            }
             if (align === 'center') {
                 document.getElementById('align-left').classList.remove('button-active');
                 document.getElementById('align-center').classList.add('button-active');
