@@ -146,6 +146,11 @@ let addEventToTd = (td) => {
                         let tdTag = listTd[j - 1];
                         tdTag.style.backgroundColor = '#b4d7ff';
                         tdTag.classList.add('highlight');
+                        if (window.getSelection) {
+                            window.getSelection().removeAllRanges();
+                        } else if (document.selection) {
+                            document.selection.empty();
+                        }
                     }
                 }
             }
