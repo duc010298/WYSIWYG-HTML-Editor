@@ -164,6 +164,18 @@ let addEventToSpan = (span) => {
         for (let span of selectSizeTableSpanList) {
             indexSpan++;
             if (event.target === span) {
+                let carretNode = getCarretNode();
+                if (carretNode === null) {
+                    carretNode = editor;
+                } else {
+                    let temp = carretNode;
+                    while(true) {
+                        if(temp === editor) break;
+                        if(temp === document) return;
+                        temp = temp.parentNode;
+                    }
+                }
+
                 let row = Number(document.querySelector('.table-dropdown input[name=row]').value);
                 let col = Number(document.querySelector('.table-dropdown input[name=col]').value);
                 let indexRow = Math.ceil(indexSpan / col);
@@ -199,8 +211,6 @@ let addEventToSpan = (span) => {
                 }
                 table.appendChild(tableBody);
 
-                let carretNode = getCarretNode();
-                if (carretNode === null) carretNode = editor;
                 carretNode.appendChild(table);
 
                 let divTag = document.createElement('div');
@@ -215,6 +225,10 @@ let addEventToSpan = (span) => {
 
                 table.onmouseup = (event) => {
                     highlightFlag = false;
+                }
+
+                table.oncontextmenu = (event) => {
+                    console.log("context-table");
                 }
             }
         }
