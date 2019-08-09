@@ -374,6 +374,7 @@
 }
 
 .context-menu {
+    display: none;
     position: fixed;
     border: 1px solid #B2B2B2;
     width: 180px;

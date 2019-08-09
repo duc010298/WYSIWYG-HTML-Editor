@@ -2,10 +2,13 @@ const selectSizeTable = document.getElementById('select-table-size');
 const selectSizeTableSpanList = selectSizeTable.getElementsByTagName('span');
 const lineSpaceDropdown = document.getElementById('dropdown-content');
 const editor = document.getElementById('editor');
+const contextMenu = document.getElementById('context-menu');
 
 let highlightFlag = false;
 let firstPos;
 let lastPos;
+
+let tempNodeTable;
 
 editor.onmousedown = (event) => {
     if (event.target.nodeName !== "TD") {
@@ -156,6 +159,21 @@ let addEventToTd = (td) => {
             }
         }
     }
+    td.oncontextmenu = (event) => {
+        tempNodeTable = event.target;
+        event.preventDefault();
+        contextMenu.style.left = event.pageX + 'px';
+        contextMenu.style.top = event.pageY + 'px';
+        contextMenu.style.display = 'block';
+        startFocusOut();
+    }
+}
+
+let startFocusOut = () => {
+    $(document).on("click", function () {
+        contextMenu.style.display = 'none';
+        $(document).off("click");
+    });
 }
 
 let addEventToSpan = (span) => {
@@ -169,9 +187,9 @@ let addEventToSpan = (span) => {
                     carretNode = editor;
                 } else {
                     let temp = carretNode;
-                    while(true) {
-                        if(temp === editor) break;
-                        if(temp === document) return;
+                    while (true) {
+                        if (temp === editor) break;
+                        if (temp === document) return;
                         temp = temp.parentNode;
                     }
                 }
@@ -225,10 +243,6 @@ let addEventToSpan = (span) => {
 
                 table.onmouseup = (event) => {
                     highlightFlag = false;
-                }
-
-                table.oncontextmenu = (event) => {
-                    console.log("context-table");
                 }
             }
         }
@@ -533,4 +547,143 @@ document.getElementById('merge-table').onclick = (event) => {
             listTdTag[j].hidden = true;
         }
     }
+}
+
+document.getElementById('insert-row-above').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    let listTrTag = tBody.getElementsByTagName("TR");
+    let totalCol = listTrTag[0].getElementsByTagName("TH").length;
+    let tr = document.createElement("tr");
+    for (let i = 0; i < totalCol; i++) {
+        let td = document.createElement("td");
+        td.style.borderCollapse = 'collapse';
+        td.style.border = '1px dotted #000';
+        td.style.wordWrap = 'break-word';
+        addEventToTd(td);
+        tr.appendChild(td);
+    }
+    tBody.insertBefore(tr, listTrTag[pos[1]]);
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
+}
+
+document.getElementById('insert-row-below').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    let listTrTag = tBody.getElementsByTagName("TR");
+    let totalCol = listTrTag[0].getElementsByTagName("TH").length;
+    let tr = document.createElement("tr");
+    for (let i = 0; i < totalCol; i++) {
+        let td = document.createElement("td");
+        td.style.borderCollapse = 'collapse';
+        td.style.border = '1px dotted #000';
+        td.style.wordWrap = 'break-word';
+        addEventToTd(td);
+        tr.appendChild(td);
+    }
+    tBody.insertBefore(tr, listTrTag[pos[1] + pos[3]]);
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
+}
+
+document.getElementById('insert-col-left').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    let listTrTag = tBody.getElementsByTagName("TR");
+    
+    for (let i = 0; i < listTrTag.length; i++) {
+        let col;
+        if (i == 0) {
+            let listThTag = listTrTag[0].getElementsByTagName("TH");
+            let th = listThTag[pos[0] - 1];
+            let temp = th.style.width;
+            let newWidth = Number(temp.substring(0, temp.length - 2)) - 22;
+            th.style.width = newWidth + 'px';
+            col = document.createElement('th');
+            col.style.width = '20px';
+            listTrTag[0].insertBefore(col, listThTag[pos[0] - 1]);
+            continue;
+        }
+        let listTdTag = listTrTag[i].getElementsByTagName("TD");
+        col = document.createElement('td');
+        col.style.borderCollapse = 'collapse';
+        col.style.border = '1px dotted #000';
+        col.style.wordWrap = 'break-word';
+        addEventToTd(col);
+        listTrTag[i].insertBefore(col, listTdTag[pos[0] - 1]);
+    }
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
+}
+
+document.getElementById('insert-col-right').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    pos = [pos[0] + pos[2]];
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    let listTrTag = tBody.getElementsByTagName("TR");
+    
+    for (let i = 0; i < listTrTag.length; i++) {
+        let col;
+        if (i == 0) {
+            let listThTag = listTrTag[0].getElementsByTagName("TH");
+            let th = listThTag[pos[0] - 1];
+            let temp = th.style.width;
+            let newWidth = Number(temp.substring(0, temp.length - 2)) - 22;
+            th.style.width = newWidth + 'px';
+            col = document.createElement('th');
+            col.style.width = '20px';
+            listTrTag[0].insertBefore(col, listThTag[pos[0] - 1]);
+            continue;
+        }
+        let listTdTag = listTrTag[i].getElementsByTagName("TD");
+        col = document.createElement('td');
+        col.style.borderCollapse = 'collapse';
+        col.style.border = '1px dotted #000';
+        col.style.wordWrap = 'break-word';
+        addEventToTd(col);
+        listTrTag[i].insertBefore(col, listTdTag[pos[0] - 1]);
+    }
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
 }
