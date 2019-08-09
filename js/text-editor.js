@@ -615,7 +615,7 @@ document.getElementById('insert-col-left').onclick = (event) => {
         tBody = tBody.parentNode;
     }
     let listTrTag = tBody.getElementsByTagName("TR");
-    
+
     for (let i = 0; i < listTrTag.length; i++) {
         let col;
         if (i == 0) {
@@ -656,7 +656,7 @@ document.getElementById('insert-col-right').onclick = (event) => {
         tBody = tBody.parentNode;
     }
     let listTrTag = tBody.getElementsByTagName("TR");
-    
+
     for (let i = 0; i < listTrTag.length; i++) {
         let col;
         if (i == 0) {
@@ -677,6 +677,67 @@ document.getElementById('insert-col-right').onclick = (event) => {
         col.style.wordWrap = 'break-word';
         addEventToTd(col);
         listTrTag[i].insertBefore(col, listTdTag[pos[0] - 1]);
+    }
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
+}
+
+document.getElementById('delete-row').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    for (let i = 0; i < pos[3]; i++) {
+        let listTrTag = tBody.getElementsByTagName('TR');
+        let needDelete = listTrTag[pos[1]];
+        tBody.removeChild(needDelete);
+    }
+
+    $(tBody.parentNode).colResizable({
+        disable: true
+    });
+    $(tBody.parentNode).colResizable({
+        liveDrag: true,
+        draggingClass: "dragging"
+    });
+}
+
+document.getElementById('delete-col').onclick = (event) => {
+    let pos = detectPosition(tempNodeTable);
+    let tBody = tempNodeTable.parentNode;
+    while (true) {
+        if (tBody.nodeName === "TBODY") break;
+        tBody = tBody.parentNode;
+    }
+    for (let i = 0; i < pos[2]; i++) {
+        let listTrTag = tBody.getElementsByTagName("TR");
+        for (let i = 0; i < listTrTag.length; i++) {
+            if (i == 0) {
+                let listThTag = listTrTag[0].getElementsByTagName("TH");
+                let thDelete = listThTag[pos[0] - 1];
+                let temp = thDelete.style.width;
+                let deleteWidth = Number(temp.substring(0, temp.length - 2));
+
+                let thBefore = listThTag[pos[0] - 2];
+                temp = thBefore.style.width;
+                let currentWidth = Number(temp.substring(0, temp.length - 2));
+                let newWidth = currentWidth + deleteWidth + 1;
+                thBefore.style.width = newWidth + 'px';
+
+                listTrTag[0].removeChild(thDelete);
+                continue;
+            }
+            let listTdTag = listTrTag[i].getElementsByTagName("TD");
+            listTrTag[i].removeChild(listTdTag[pos[0] - 1]);
+        }
     }
 
     $(tBody.parentNode).colResizable({
