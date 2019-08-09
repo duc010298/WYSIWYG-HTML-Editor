@@ -356,6 +356,7 @@ let detectStyleOnCaret = () => {
 
 let highLightButtonStyle = (node, isChangedFontStyle, isChangedFontSize,
     isBold, isItalic, isUnderline, isAlign) => {
+    if (node === null) return;
     if (node === editor) {
         if (!isChangedFontStyle) document.getElementById('select-font').value = 'Times New Roman';
         if (!isChangedFontSize) document.getElementById('select-font-size').value = 4;
