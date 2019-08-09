@@ -62,6 +62,18 @@ let getCarretNode = () => {
 let detectPosition = (td) => {
     let col = 0;
     let row = -1;
+    let colspan = td.getAttribute("colspan");
+    if (colspan === null) {
+        colspan = 1;
+    } else {
+        colspan = Number(colspan);
+    }
+    let rowspan = td.getAttribute("rowspan");
+    if (rowspan === null) {
+        rowspan = 1;
+    } else {
+        rowspan = Number(rowspan);
+    }
     let trNode = td.parentNode;
     while (true) {
         if (trNode.nodeName === "TR") break;
@@ -84,7 +96,7 @@ let detectPosition = (td) => {
         row++;
         if (trNode === tempTr) break;
     }
-    return [col, row];
+    return [col, row, colspan, rowspan];
 }
 
 let resetHighlight = (td) => {
@@ -115,20 +127,12 @@ let addEventToTd = (td) => {
                 lastPos = currentPos;
 
                 let fCol, fRow, lCol, lRow;
-                if (firstPos[0] < lastPos[0]) {
-                    fCol = firstPos[0];
-                    lCol = lastPos[0];
-                } else {
-                    lCol = firstPos[0];
-                    fCol = lastPos[0];
-                }
-                if (firstPos[1] < lastPos[1]) {
-                    fRow = firstPos[1];
-                    lRow = lastPos[1];
-                } else {
-                    lRow = firstPos[1];
-                    fRow = lastPos[1];
-                }
+                let temp1 = [firstPos[0], lastPos[0], firstPos[0] + firstPos[2] - 1, lastPos[0] + lastPos[2] - 1];
+                fCol = Math.min(...temp1);
+                lCol = Math.max(...temp1);
+                let temp2 = [firstPos[1], lastPos[1], firstPos[1] + firstPos[3] - 1, lastPos[1] + lastPos[3] - 1];
+                fRow = Math.min(...temp2);
+                lRow = Math.max(...temp2);
 
                 let tBodyNode = event.target.parentNode;
                 while (true) {
@@ -460,20 +464,12 @@ for (let li of lineSpaceDropdown.getElementsByTagName('li')) {
 
 document.getElementById('merge-table').onclick = (event) => {
     let fCol, fRow, lCol, lRow;
-    if (firstPos[0] < lastPos[0]) {
-        fCol = firstPos[0];
-        lCol = lastPos[0];
-    } else {
-        lCol = firstPos[0];
-        fCol = lastPos[0];
-    }
-    if (firstPos[1] < lastPos[1]) {
-        fRow = firstPos[1];
-        lRow = lastPos[1];
-    } else {
-        lRow = firstPos[1];
-        fRow = lastPos[1];
-    }
+    let temp1 = [firstPos[0], lastPos[0], firstPos[0] + firstPos[2] - 1, lastPos[0] + lastPos[2] - 1];
+    fCol = Math.min(...temp1);
+    lCol = Math.max(...temp1);
+    let temp2 = [firstPos[1], lastPos[1], firstPos[1] + firstPos[3] - 1, lastPos[1] + lastPos[3] - 1];
+    fRow = Math.min(...temp2);
+    lRow = Math.max(...temp2);
 
     let highlightEl = document.getElementsByClassName('highlight')[0];
     let tBody = highlightEl.parentNode;
@@ -502,6 +498,8 @@ document.getElementById('merge-table').onclick = (event) => {
                 listTdTag[j].innerHTML = "";
                 listTdTag[j].removeAttribute("class");
                 listTdTag[j].removeAttribute("style");
+                listTdTag[j].removeAttribute("colspan");
+                listTdTag[j].removeAttribute("rowspan");
                 listTdTag[j].hidden = true;
             }
             continue;
@@ -510,6 +508,8 @@ document.getElementById('merge-table').onclick = (event) => {
             listTdTag[j].innerHTML = "";
             listTdTag[j].removeAttribute("class");
             listTdTag[j].removeAttribute("style");
+            listTdTag[j].removeAttribute("colspan");
+            listTdTag[j].removeAttribute("rowspan");
             listTdTag[j].hidden = true;
         }
     }
